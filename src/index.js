@@ -1,8 +1,5 @@
-/**
- * @param {Function} func
- * @param {number} [delay = 0]
- * @param {*?} context
- */
+const noop = () => {}
+
 const cueue = (func, delay = 0, context) => {
   if (typeof func !== 'function') {
     throw new TypeError('first argument must be function.')
@@ -12,37 +9,56 @@ const cueue = (func, delay = 0, context) => {
     throw new TypeError('second argument must be positive number.')
   }
 
-  let isRun = false
+  let isRun
   let promise
+  let pendding
+  let resolve
+  let reject
   let timer
   const q = []
   const result = []
 
-  const iterator = resolve => {
-    if (q.length > 0) {
-      result.push(
-        func.apply(context, q.shift())
-      )
-      timer = setTimeout(() => iterator(resolve), delay)
-    } else {
-      clearTimeout(timer)
-      resolve([...result])
-      result.length = 0
+  const initialize = () => {
+    isRun = pendding = false
+    resolve = reject = noop
+    q.length = result.length = 0
+  }
+
+  const iterator = () => {
+    try {
+      if (q.length > 0) {
+        result.push(func.apply(context, q.shift()))
+        timer = setTimeout(iterator, delay)
+      } else {
+        clearTimeout(timer)
+        resolve([...result])
+        initialize()
+      }
+    } catch (e) {
       isRun = false
+      reject(e)
     }
+  }
+
+  const registerResolver = (...a) => {
+    resolve = a[0]
+    reject = a[1]
+  }
+
+  const executor = (...a) => {
+    registerResolver(...a)
+    iterator()
   }
 
   const run = () => {
     if (!isRun) {
       isRun = true
-      return promise = new Promise((...a) => {
-        try {
-          iterator(...a)
-        } catch (e) {
-          const [, reject] = a
-          reject(e)
-        }
-      })
+      if (pendding) {
+        pendding = false
+        iterator()
+      } else {
+        return promise = new Promise(executor)
+      }
     }
     return promise
   }
@@ -53,6 +69,14 @@ const cueue = (func, delay = 0, context) => {
     clearTimeout(timer)
     isRun = false
   }
+
+  const clear = () => {
+    stop()
+    reject(new Error('Canceled queue executor.'))
+    initialize()
+  }
+
+  initialize()
 
   return {
     run() {
@@ -69,12 +93,12 @@ const cueue = (func, delay = 0, context) => {
     },
 
     stop() {
+      if (isRun) pendding = true
       stop()
     },
 
     clear() {
-      stop()
-      q.length = 0
+      clear()
     },
 
     length() {

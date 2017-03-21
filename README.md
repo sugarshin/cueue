@@ -30,12 +30,14 @@ q.run().then((...a) => console.info(...a))
 
 ## API
 
-- `.add(...args)`
-- `.run()` return `{Promise}`
-- `.push(...args)` - return `{Promise}`
-- `.stop()`
-- `.clear()`
-- `.length()` return `{number}`
+### `const q = cueue(func, [delay [, context]])`
+
+- `q.add(...args)`
+- `q.run()` return `{Promise}`
+- `q.push(...args)` return `{Promise}`
+- `q.stop()`
+- `q.clear()`
+- `q.length()` return `{number}`
 
 ## License
 
@@ -43,7 +45,7 @@ q.run().then((...a) => console.info(...a))
 
 © sugarshin
 
-[circleci-image]: https://circleci.com/gh/sugarshin/cueue/tree/master.svg?style=svg&circle-token=
+[circleci-image]: https://circleci.com/gh/sugarshin/cueue/tree/master.svg?style=svg&circle-token=ce871df2d04270845e3a6f03f69f6fd41d58fd1d
 [circleci-url]: https://circleci.com/gh/sugarshin/cueue/tree/master
 [coveralls-image]: https://coveralls.io/repos/github/sugarshin/cueue/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/sugarshin/cueue?branch=master
