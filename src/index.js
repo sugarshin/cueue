@@ -40,13 +40,13 @@ const cueue = (func, delay = 0, context) => {
     }
   }
 
-  const registerResolver = (...a) => {
-    resolve = a[0]
-    reject = a[1]
+  const registerResolver = (_resolve, _reject) => {
+    resolve = _resolve
+    reject = _reject
   }
 
-  const executor = (...a) => {
-    registerResolver(...a)
+  const executor = (resolve, reject) => {
+    registerResolver(resolve, reject)
     iterator()
   }
 
