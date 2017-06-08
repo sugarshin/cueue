@@ -1,6 +1,6 @@
 {
   "name": "cueue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiny, Easy queueing on Promise based.",
   "main": "lib/index.js",
   "module": "es/index.js",
