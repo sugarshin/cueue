@@ -10,7 +10,6 @@
   },
   "rules": {
     "babel/new-cap": 1,
-    "babel/no-await-in-loop": 1,
     "babel/no-invalid-this": 1,
     "semi": [2, "never"],
     "comma-dangle": [2, {
