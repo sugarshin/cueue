@@ -35,7 +35,7 @@
     "build:commonjs": "BABEL_ENV=commonjs babel -d lib src",
     "build:es": "BABEL_ENV=es babel -d es src",
     "build": "npm run build:commonjs && npm run build:es",
-    "prepublish": "npm run lint && npm test && npm run build"
+    "prepublishOnly": "npm run lint && npm test && npm run build"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.39",
