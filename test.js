@@ -82,7 +82,6 @@ import cueue from './src'
     q.stop()
     q.clear()
     t.is(q.length(), 0)
-    t.pass()
   })
 
   test(`invalid arguments ${delay}, delayed`, t => {
