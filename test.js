@@ -69,7 +69,7 @@ import cueue from './src'
     t.is(error.message, 'Canceled queue executor.')
   })
 
-  test('length()', t => {
+  test(`length() ${delay}, delayed`, t => {
     const q = cueue(() => {}, delay)
     q.add()
     q.add()
@@ -77,22 +77,21 @@ import cueue from './src'
     t.is(q.length(), 3)
   })
 
-  test('nothig', t => {
+  test(`nothing ${delay}, delayed`, t => {
     const q = cueue(() => {}, delay)
     q.stop()
     q.clear()
     t.is(q.length(), 0)
-    t.pass()
   })
 
-  test('invalid arguments', t => {
+  test(`invalid arguments ${delay}, delayed`, t => {
     const error0 = t.throws(() => cueue(), TypeError)
     t.is(error0.message, 'first argument must be function.')
     const error1 = t.throws(() => cueue(() => {}, '🦄'), TypeError)
     t.is(error1.message, 'second argument must be positive number.')
   })
 
-  test('throw exeption in iterator', async t => {
+  test(`throw exeption in iterator ${delay}, delayed`, async t => {
     const func = i => {
       if (i < 5) {
         return i
@@ -110,5 +109,12 @@ import cueue from './src'
       t.is(e.message, '🙏')
       t.is(q.length(), 4)
     }
+  })
+
+  test(`execution context / ${delay}, delayed`, async t => {
+    const context = { val: '🙏', getVal() { return this.val } }
+    const q = cueue(context.getVal, delay, context)
+    const result = await q.push()
+    t.is(result[0], '🙏')
   })
 })
