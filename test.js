@@ -110,4 +110,11 @@ import cueue from './src'
       t.is(q.length(), 4)
     }
   })
+
+  test(`execution context / ${delay}, delayed`, async t => {
+    const context = { val: '🙏', getVal() { return this.val } }
+    const q = cueue(context.getVal, delay, context)
+    const result = await q.push()
+    t.is(result[0], '🙏')
+  })
 })
