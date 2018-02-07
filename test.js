@@ -77,7 +77,7 @@ import cueue from './src'
     t.is(q.length(), 3)
   })
 
-  test(`nothig ${delay}, delayed`, t => {
+  test(`nothing ${delay}, delayed`, t => {
     const q = cueue(() => {}, delay)
     q.stop()
     q.clear()
